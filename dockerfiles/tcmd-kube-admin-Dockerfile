@@ -1,0 +1,12 @@
+FROM rvmey/triggercmdagent
+
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt install -y curl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+RUN mv ./kubectl /usr/local/bin
+RUN chmod 544 /usr/local/bin/kubectl
+
+COPY triggercmd-admin.sh /usr/local/bin/
+RUN chmod 544 /usr/local/bin/triggercmd-admin.sh
+
+CMD sh /usr/local/bin/triggercmd-admin.sh

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: triggercmd-admin
+  namespace: kube-system
+  labels:
+    app: triggercmd-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: triggercmd-admin
+  template:
+    metadata:
+      labels:
+        app: triggercmd-admin
+    spec:
+      containers:
+      - name: triggercmd-admin
+        image: rvmey/tcmd-kube-admin:1.8
+        env:
+          - name: TCMD_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: triggercmd-token
+                key: token.tkn
+          - name: TCMD_COMPUTER
+            valueFrom:
+              secretKeyRef:
+                name: triggercmd-token
+                key: computerid.cfg
+        command:
+          - /bin/sh
+          - -c
+          - /usr/local/bin/triggercmd-admin.sh          
+        volumeMounts:
+          - name: triggercmd-commands
+            mountPath: "/tmp/commands"
+            readOnly: true
+          - name: triggercmd-scripts
+            mountPath: "/usr/local/bin/scripts"
+            readOnly: true
+      serviceAccountName: triggercmd-admin
+      volumes:
+        - name: triggercmd-token
+          secret:            
+            secretName: triggercmd-token
+        - name: triggercmd-commands
+          secret:
+            secretName: triggercmd-commands
+        - name: triggercmd-scripts
+          secret:
+            defaultMode: 500
+            secretName: triggercmd-scripts

@@ -1,0 +1,18 @@
+[
+    {
+     "trigger": "Deployment Demo",
+     "command": "/usr/local/bin/scripts/demo.sh",
+     "ground": "foreground",
+     "voice": "demo",
+     "voiceReply": "Done",
+     "allowParams": "true"
+    },
+    {
+     "trigger": "Pod Count Demo",
+     "command": "/usr/local/bin/scripts/count.sh",
+     "ground": "foreground",
+     "voice": "count",
+     "voiceReply": "There are {{result}} pods in the demo deployment.",
+     "allowParams": "false"
+    }
+   ]
